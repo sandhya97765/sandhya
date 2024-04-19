@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12.3'  # Choose a stable Python version
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Output installed dependencies
+        run: pip freeze
+
+      - name: Run tests
+        run: pytest  # Using pytest instead of unittest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Heroku
+        run: |
+          echo "Deploying application to Heroku..."
+          # Add your Heroku deployment commands here
+          # Example:
+          # heroku login -i
+          # git remote add heroku <HEROKU_REMOTE_URL>
+          # git push heroku main
